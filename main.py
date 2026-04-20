@@ -72,3 +72,25 @@ def create_mood(entry: MoodEntry) -> MoodEntry:
 def get_moods() -> list[MoodEntry]:
     """Retrieve all mood entries."""
     return mood_entries
+
+@app.get("/moods/average")
+def get_average() -> dict:
+    """Get average of all mood entries."""
+    total = sum(entry.score for entry in mood_entries)
+    average = total/len(mood_entries)
+    return {"average": average}
+
+@app.delete("/moods/{index}")
+def delete_mood(index: int) -> list[MoodEntry]:
+    """Delete a mood entry."""
+    mood_entries.pop(index)
+    return mood_entries
+
+@app.get("/moods/best")
+def get_best() -> dict:
+    """Get average of all mood entries."""
+    best = mood_entries[0]
+    for entry in mood_entries:
+        if entry.score > best.score:
+            best = entry
+    return {"best": best}
